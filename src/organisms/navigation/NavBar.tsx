@@ -1,40 +1,88 @@
 // src/organisms/navigation/Navbar.tsx
 import { Link } from 'react-router-dom'
 import { Search, Menu, Settings } from 'lucide-react'
+import styled from 'styled-components'
+
+const Nav = styled.nav`
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  width: 100%;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.surface};
+  background: ${({ theme }) => theme.colors.background};
+  backdrop-filter: blur(10px);
+`
+
+const Container = styled.div`
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 ${({ theme }) => theme.spacing.md};
+  height: 56px;
+  display: flex;
+  align-items: center;
+`
+
+const Logo = styled(Link)`
+  font-weight: bold;
+  margin-right: ${({ theme }) => theme.spacing.xl};
+`
+
+const SearchContainer = styled.div`
+  flex: 1;
+  margin-right: ${({ theme }) => theme.spacing.md};
+`
+
+const SearchButton = styled.button`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 300px;
+  padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.md};
+  border-radius: ${({ theme }) => theme.borderRadius.md};
+  background: ${({ theme }) => theme.colors.surface};
+  color: ${({ theme }) => theme.colors.textSecondary};
+  transition: background 0.2s;
+
+  &:hover {
+    background: ${({ theme }) => theme.colors.surface}dd;
+  }
+`
+
+const IconButton = styled.button`
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: ${({ theme }) => theme.borderRadius.md};
+  color: ${({ theme }) => theme.colors.text};
+  
+  &:hover {
+    background: ${({ theme }) => theme.colors.surface};
+  }
+`
 
 export const Navbar = () => {
   return (
-    <nav className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-14 items-center">
-        <div className="mr-4 flex">
-          <Link to="/" className="mr-6 flex items-center space-x-2">
-            <span className="font-bold">Hierloom</span>
-          </Link>
-        </div>
+    <Nav>
+      <Container>
+        <Logo to="/">Hierloom</Logo>
+        
+        <SearchContainer>
+          <SearchButton>
+            <Search size={16} style={{ marginRight: 8 }} />
+            <span>Search...</span>
+          </SearchButton>
+        </SearchContainer>
 
-        <div className="flex flex-1 items-center justify-between space-x-2">
-          <div className="w-full flex-1 md:w-auto md:flex-none">
-            <button className="inline-flex items-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2 relative w-full justify-start text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64">
-              <Search className="mr-2 h-4 w-4" />
-              <span>Search...</span>
-            </button>
-          </div>
-
-          <nav className="flex items-center space-x-2">
-            <Link
-              to="/settings"
-              className="w-9 px-0 h-9 inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground"
-            >
-              <Settings className="h-5 w-5" />
-              <span className="sr-only">Settings</span>
-            </Link>
-            <button className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground h-9 w-9 px-0">
-              <Menu className="h-5 w-5" />
-              <span className="sr-only">Menu</span>
-            </button>
-          </nav>
-        </div>
-      </div>
-    </nav>
+        <IconButton as={Link} to="/settings">
+          <Settings size={20} />
+        </IconButton>
+        
+        <IconButton style={{ marginLeft: 8 }}>
+          <Menu size={20} />
+        </IconButton>
+      </Container>
+    </Nav>
   )
 }
