@@ -1,7 +1,7 @@
 // src/pages/auth/login.tsx
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth';
+import { useAuth } from '../../lib/auth';
 import {
   AuthBox,
   AuthContainer,
@@ -14,11 +14,19 @@ import {
 export const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { login, error, loading } = useAuth();
+  const { login, error } = useAuth();
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    login(email, password);
+    setLoading(true);
+    try {
+      await login(email, password);
+    } catch {
+      // Error is handled in auth context
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -42,7 +50,7 @@ export const Login = () => {
             required
           />
           <AuthButton type="submit" disabled={loading}>
-            {loading ? 'Loading...' : 'Login'}
+            {loading ? 'Logging in...' : 'Login'}
           </AuthButton>
         </form>
         <AuthLink>

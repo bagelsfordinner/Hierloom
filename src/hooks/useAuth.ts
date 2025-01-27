@@ -17,8 +17,10 @@ export const useAuth = () => {
     try {
       setLoading(true);
       setError('');
-      await createUserWithEmailAndPassword(auth, email, password);
-      navigate('/campaigns');
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      if (userCredential.user) {
+        navigate('/campaigns');
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Registration failed');
     } finally {
@@ -30,8 +32,10 @@ export const useAuth = () => {
     try {
       setLoading(true);
       setError('');
-      await signInWithEmailAndPassword(auth, email, password);
-      navigate('/campaigns');
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      if (userCredential.user) {
+        navigate('/campaigns');
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Login failed');
     } finally {

@@ -1,7 +1,7 @@
 // src/pages/auth/register.tsx
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth';
+import { useAuth } from '../../lib/auth';
 import {
   AuthBox,
   AuthContainer,
@@ -14,11 +14,20 @@ import {
 export const Register = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { register, error, loading } = useAuth();
+  const [username, setUsername] = useState('');
+  const { register, error } = useAuth();
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    register(email, password);
+    setLoading(true);
+    try {
+      await register(email, password, username);
+    } catch {
+      // Error is handled in auth context
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -27,6 +36,13 @@ export const Register = () => {
         <AuthTitle>Create Account</AuthTitle>
         {error && <p style={{ color: 'red', marginBottom: '1rem' }}>{error}</p>}
         <form onSubmit={handleSubmit}>
+          <AuthInput
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
           <AuthInput
             type="email"
             placeholder="Email"
@@ -42,7 +58,7 @@ export const Register = () => {
             required
           />
           <AuthButton type="submit" disabled={loading}>
-            {loading ? 'Loading...' : 'Register'}
+            {loading ? 'Creating Account...' : 'Register'}
           </AuthButton>
         </form>
         <AuthLink>

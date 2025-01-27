@@ -7,11 +7,7 @@ import { theme } from './styles/theme'
 import { GlobalStyles } from './styles/GlobalStyles'
 import { Login } from './pages/auth/login'
 import { Register } from './pages/auth/register'
-import { Cartographer } from './pages/campaign/cartographer'
-import { Atlas } from './pages/campaign/atlas'
-import { Players } from './pages/campaign/players'
-import { Dashboard } from './pages/campaign/dashboard'
-import { Settings } from './pages/settings'
+import { CampaignsPage } from './pages/campaigns'
 
 const AppContent = () => {
   const location = useLocation();
@@ -23,17 +19,18 @@ const AppContent = () => {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/campaigns" element={<CampaignsPage />} />
         
         {/* Campaign Routes */}
         <Route path="/campaign/:id">
-          <Route path="atlas" element={<Atlas />} />
-          <Route path="cartographer" element={<Cartographer />} />
-          <Route path="players" element={<Players />} />
-          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="atlas" element={<div>Atlas</div>} />
+          <Route path="cartographer" element={<div>Cartographer</div>} />
+          <Route path="players" element={<div>Players</div>} />
+          <Route path="dashboard" element={<div>Dashboard</div>} />
         </Route>
 
         {/* Settings */}
-        <Route path="/settings" element={<Settings />} />
+        <Route path="/settings" element={<div>Settings</div>} />
         
         {/* Default redirect */}
         <Route path="*" element={<Navigate to="/login" replace />} />
@@ -44,14 +41,14 @@ const AppContent = () => {
 
 const App = () => {
   return (
-    <ThemeProvider theme={theme}>
-      <GlobalStyles />
-      <AuthProvider>
-        <Router>
+    <Router>
+      <ThemeProvider theme={theme}>
+        <GlobalStyles />
+        <AuthProvider>
           <AppContent />
-        </Router>
-      </AuthProvider>
-    </ThemeProvider>
+        </AuthProvider>
+      </ThemeProvider>
+    </Router>
   );
 };
 
